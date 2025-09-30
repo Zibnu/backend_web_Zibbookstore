@@ -1,6 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/db");
 const User = require("./User");
+const Shipment = require("./Shipment");
 const Addres = sequelize.define(
   "Addres",
   {
@@ -47,4 +48,5 @@ const Addres = sequelize.define(
 );
 
 Addres.belongsTo(User, { foreignKey: "user_id" });
+Addres.hasMany(Shipment)
 module.exports = Addres;

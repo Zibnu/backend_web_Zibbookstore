@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize')
 const sequelize = require('../config/db')
-const Order = require('./Order')
+const Addres = require('./Addres');
 
 const Shipment = sequelize.define('Shipment', {
   id : {
@@ -8,11 +8,11 @@ const Shipment = sequelize.define('Shipment', {
     primaryKey : true,
     defaultValue : DataTypes.UUIDV4
   },
-  order_id : {
+  addres_id : {
     type : DataTypes.UUID,
     allowNull : false,
     references : {
-      model : Order,
+      model : Addres,
       key : "id",
     },
   },
@@ -25,9 +25,9 @@ const Shipment = sequelize.define('Shipment', {
   }
 }, {
   tableName : "shipments",
-  timestamps : false,
+  timestamps : true,
 }
 );
-Shipment.belongsTo(Order, {foreignKey : "id"}),
+Shipment.belongsTo(Addres, {foreignKey : "id"}),
 
 module.exports = Shipment

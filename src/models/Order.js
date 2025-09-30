@@ -1,5 +1,7 @@
 const { DataTypes } = require('sequelize')
 const sequelize = require('../config/db')
+const User = require('./User')
+const OrderItem = require('./Order_item')
 
 const Order = sequelize.define("Oders", {
   id : {
@@ -7,7 +9,18 @@ const Order = sequelize.define("Oders", {
     primaryKey : true,
     defaultValue : DataTypes.UUIDV4,
   },
-  total_cents : { type : DataTypes.INTEGER, allowNull : false},
+  user_id : {
+    type : DataTypes.UUID,
+    allowNull : false,
+    references : {
+      model : User,
+      key : "id"
+    }
+  },
+  total_cents : {
+    type : DataTypes.INTEGER,
+    allowNull : false
+  },
   status : {
     type : DataTypes.STRING(20),
     defaultValue : 'paid',
@@ -15,13 +28,12 @@ const Order = sequelize.define("Oders", {
       isIn : [["pending", "paid", "canceled" ]]
     }
   },
-  // foreign key
-  user_id : { type : DataTypes.UUID, allowNull : false},
-  addres_id : { type : DataTypes.UUID, allowNull : false}
 },
 {
   tableName : "orders",
   timestamps : false
 }
 )
+Order.hasMany(OrderItem)
+Order.belongsTo(User, {foreignKey : "user_id"})
 module.exports = Order

@@ -32,7 +32,8 @@ const Review = sequelize.define("Review", {
   Comment : {
     type : DataTypes.TEXT,
   },
-}, {
+},
+{
   tableName : "reviews",
   timestamps : false
 }
