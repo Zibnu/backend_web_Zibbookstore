@@ -1,34 +1,21 @@
 const express = require("express");
-const dotenv = require("dotenv");
-const { Sequelize } = require("sequelize");
 const app = express();
+require("dotenv").config();
 
-dotenv.config();
+app.use(express.json({}));
+
 const PORT = process.env.PORT;
-
-// defin Config DB
-const db_name = process.env.DB_NAME;
-const db_user = process.env.DB_USER;
-const db_pass = process.env.DB_PASS;
-const db_host = process.env.DB_HOSE;
-
-// Sequelize connec to DB
-const sequelize = new Sequelize(db_name, db_user, db_pass, {
-  host: db_host,
-  dialect: "postgres",
-});
-
-// Testing connect
-// sequelize.authenticate()
-//   .then(() => {
-//     console.log("Connection to DB succes");
-//   })
-//   .catch(err => {
-//     console.error('Failed connect to DB', err);
-//   })
-
+// Routes
 app.get("/", (req, res) => {
   res.json({ pesan: "Welcome" });
 });
+const autRoutes = require("./src/routes/authRouter");
+app.use('/auth', autRoutes);
+
+// Testing models
+const db = require("./src/models");
+console.log("Available Models:", Object.keys(db));
+console.log("Order Model:", db.Order);
+console.log("OrderItem Model:", db.OrderItem);
 
 app.listen(PORT, () => console.log("Server is Running"));

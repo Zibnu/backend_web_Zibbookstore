@@ -1,8 +1,5 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../config/db");
-const User = require("./User");
-const Shipment = require("./Shipment");
-const Address = sequelize.define(
+module.exports = (sequelize, DataTypes) => {
+  const Address = sequelize.define(
   "Address",
   {
     id_addres: {
@@ -14,7 +11,7 @@ const Address = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: User,
+        model: "users",
         key: "id_user",
       },
     },
@@ -40,12 +37,16 @@ const Address = sequelize.define(
     },
   },
   {
+    modelName : "Address",
     tableName: "addres",
     timestamps: true,
     paranoid : true
   }
 );
+Address.associate = (models) => {
+  Address.belongsTo(models.User, { foreignKey: "user_id", as : "user" });
+  Address.hasMany(models.Shipment, { foreignKey : "id_shipment", as : "shipment"})
+};
 
-Address.belongsTo(User, { foreignKey: "user_id", as : "user" });
-Address.hasMany(Shipment, { foreignKey : "shipment_id", as : "shipment"})
-module.exports = Address;
+  return Address;
+}
