@@ -4,17 +4,17 @@ const User = require('./User')
 const OrderItem = require('./Order_item')
 
 const Order = sequelize.define("Oders", {
-  id : {
-    type : DataTypes.UUID,
+  id_order : {
+    type : DataTypes.INTEGER,
     primaryKey : true,
-    defaultValue : DataTypes.UUIDV4,
+    autoIncrement: true,
   },
   user_id : {
-    type : DataTypes.UUID,
+    type : DataTypes.INTEGER,
     allowNull : false,
     references : {
       model : User,
-      key : "id"
+      key : "id_user"
     }
   },
   total_cents : {
@@ -31,9 +31,10 @@ const Order = sequelize.define("Oders", {
 },
 {
   tableName : "orders",
-  timestamps : false
+  timestamps : true,
+  paranoid : true
 }
 )
-Order.hasMany(OrderItem)
-Order.belongsTo(User, {foreignKey : "user_id"})
+Order.hasMany(OrderItem, {foreignKey : "order_id", as : "order_item"})
+Order.belongsTo(User, {foreignKey : "user_id", as : "user"})
 module.exports = Order

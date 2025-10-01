@@ -5,17 +5,18 @@ const OrderItem = require('./Order_item')
 const Review = require('./Review')
 
 const Book = sequelize.define("Book", {
-  id : {
-    type : DataTypes.UUID,
-    defaultValue : DataTypes.UUIDV4,
-    primaryKey : true
+  id_book : {
+    type : DataTypes.INTEGER,
+    primaryKey : true,
+    autoIncrement : true,
   },
   title : {
     type : DataTypes.STRING(150),
     allowNull : false
   },
   author : {
-    type : DataTypes.STRING(200)
+    type : DataTypes.STRING(200),
+    allowNull : false,
   },
   description : {
     type : DataTypes.TEXT
@@ -25,7 +26,7 @@ const Book = sequelize.define("Book", {
     allowNull : false,
     references : {
       model : Category,
-      key : "category_id"
+      key : "id_category"
     },
   },
   price_cents : { 
@@ -34,22 +35,20 @@ const Book = sequelize.define("Book", {
   },
   stock : {
     type : DataTypes.INTEGER,
-    defaultValue : 0
+    defaultValue : 0,
   },
   cover_path : {
-    type : DataTypes.TEXT
-  },
-  created_at : {
-    type : DataTypes.TIME,
-    defaultValue : DataTypes.NOW
+    type : DataTypes.TEXT,
+    allowNull : false,
   },
 },
 {
   tableName : "books",
-  timestamps : false
+  timestamps : true,
+  paranoid : true,
 }
 )
-Book.belongsTo(Category, {foreignKey : "category_id"})
-Book.belongsTo((OrderItem))
-Book.hasMany(Review)
+Book.belongsTo(Category, {foreignKey : "category_id", as : "category"})
+Book.belongsTo((OrderItem, {foreignKey : "order_item_id", as : "order_item"}))
+Book.hasMany(Review, {foreignKey : "book_id", as : "review"})
 module.exports = Book

@@ -4,25 +4,25 @@ const User = require("./User")
 const Book = require("./Book")
 
 const Review = sequelize.define("Review", {
-  id : {
-    type : DataTypes.UUID,
+  id_review : {
+    type : DataTypes.INTEGER,
     primaryKey : true,
-    defaultValue : DataTypes.UUIDV4
+    autoIncrement: true,
   },
   user_id : {
-    type : DataTypes.UUID,
+    type : DataTypes.INTEGER,
     allowNull : false,
     references : {
       model : User,
-      key : "id",
+      key : "id_user",
     },
   },
   book_id : {
-    type : DataTypes.UUID,
+    type : DataTypes.INTEGER,
     allowNull : false,
     references : {
       model : Book,
-      key : "id",
+      key : "id_book",
     },
   },
   rating : {
@@ -35,10 +35,11 @@ const Review = sequelize.define("Review", {
 },
 {
   tableName : "reviews",
-  timestamps : false
+  timestamps : true,
+  paranoid : true
 }
 )
 // Relasi 
-Review.belongsTo(User, {foreignKey : "id"}),
-Review.belongsTo(Book, {foreignKey : "id"})
+Review.belongsTo(User, {foreignKey : "user_id", as : "user"} ),
+Review.belongsTo(Book, {foreignKey : "book_id", as : "book"})
 module.exports = Review

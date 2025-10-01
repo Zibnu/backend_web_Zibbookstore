@@ -4,25 +4,25 @@ const Order = require('./Order')
 const Book = require('./Book')
 
 const OrderItem = sequelize.define("OrderItem", {
-  id : {
-    type: DataTypes.UUID,
-    defaultValue : DataTypes.UUIDV4,
-    primaryKey : true
+  id_order : {
+    type: DataTypes.INTEGER,
+    primaryKey : true,
+    autoIncrement : true,
   },
   order_id : {
-    type : DataTypes.UUID,
+    type : DataTypes.INTEGER,
     allowNull : false,
     references : {
       model : Order,
-      key : "id",
+      key : "id_order",
     }
   },
   book_id : {
-    type : DataTypes.UUID,
+    type : DataTypes.INTEGER,
     allowNull : false,
     references : {
       model : Book,
-      key : "id"
+      key : "id_book"
     }
   },
   price_cent : {
@@ -34,17 +34,16 @@ const OrderItem = sequelize.define("OrderItem", {
     allowNull : false,
     defaultValue : 1
   },
-
-
 },
 {
   tableName : "order_items",
-  timestamps : false
+  timestamps : true,
+  paranoid : true
 }
 )
 
-OrderItem.belongsTo(Book, {foreignKey : "id"})
-OrderItem.belongsTo(Order, { foreignKey : "id"})
+OrderItem.belongsTo(Book, {foreignKey : "book_id", as : "book"})
+OrderItem.belongsTo(Order, { foreignKey : "order_id", as : "Order"})
 
 
 module.exports = OrderItem

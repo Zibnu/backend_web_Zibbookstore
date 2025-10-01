@@ -2,22 +2,20 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("../config/db");
 const User = require("./User");
 const Shipment = require("./Shipment");
-const Addres = sequelize.define(
-  "Addres",
+const Address = sequelize.define(
+  "Address",
   {
-    id: {
-      type: DataTypes.UUID,
+    id_addres: {
+      type: DataTypes.INTEGER,
       primaryKey: true,
-      allowNull: false,
-      defaultValue: DataTypes.UUIDV4,
+      autoIncrement: true,
     },
     user_id: {
-      type: DataTypes.UUID,
+      type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: DataTypes.UUIDV4,
       references: {
         model: User,
-        key: "id",
+        key: "id_user",
       },
     },
     full_name: {
@@ -43,10 +41,11 @@ const Addres = sequelize.define(
   },
   {
     tableName: "addres",
-    timestamps: false,
+    timestamps: true,
+    paranoid : true
   }
 );
 
-Addres.belongsTo(User, { foreignKey: "user_id" });
-Addres.hasMany(Shipment)
-module.exports = Addres;
+Address.belongsTo(User, { foreignKey: "user_id", as : "user" });
+Address.hasMany(Shipment, { foreignKey : "shipment_id", as : "shipment"})
+module.exports = Address;
