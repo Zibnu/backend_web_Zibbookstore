@@ -2,7 +2,7 @@ module.exports = (sequelize, DataTypes) => {
   const Address = sequelize.define(
   "Address",
   {
-    id_addres: {
+    id_address: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
@@ -38,14 +38,14 @@ module.exports = (sequelize, DataTypes) => {
   },
   {
     modelName : "Address",
-    tableName: "addres",
+    tableName: "address",
     timestamps: true,
     paranoid : true
   }
 );
 Address.associate = (models) => {
   Address.belongsTo(models.User, { foreignKey: "user_id", as : "user" });
-  Address.hasMany(models.Shipment, { foreignKey : "id_shipment", as : "shipment"})
+  Address.hasMany(models.Shipment, { foreignKey : "address_id", as : "shipments"})
 };
 
   return Address;

@@ -46,7 +46,7 @@ module.exports = (sequelize, DataTypes) => {
   // definisi relasi
   Book.associate = (models) => {
     Book.belongsTo(models.Category, { foreignKey: "category_id", as: "category" });
-    Book.belongsTo(models.OrderItem, { foreignKey: "order_item_id", as: "order_item" });
+    Book.hasMany(models.OrderItem, { foreignKey: "book_id", as: "order_items" });
     Book.hasMany(models.Review, { foreignKey: "book_id", as: "reviews" });
   };
 

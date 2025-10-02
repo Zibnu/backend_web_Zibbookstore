@@ -4,7 +4,7 @@
 module.exports = {
   async up (queryInterface, Sequelize) {
     await queryInterface.createTable("address", {
-      id_addres: {
+      id_address: {
       type: Sequelize.INTEGER,
       primaryKey: true,
       autoIncrement: true,
@@ -13,7 +13,7 @@ module.exports = {
       type: Sequelize.INTEGER,
       allowNull: false,
       references: {
-        model: "user",
+        model: "users",
         key: "id_user",
       },
     },
@@ -37,6 +37,18 @@ module.exports = {
       type: Sequelize.STRING(100),
       allowNull: false,
     },
+    createdAt : {
+      type : Sequelize.DATE,
+      allowNull : false
+    },
+    updatedAt : {
+      type : Sequelize.DATE,
+      allowNull : false,
+    },
+    deletedAt : {
+      type : Sequelize.DATE,
+      allowNull : true
+    }
     })
   },
 

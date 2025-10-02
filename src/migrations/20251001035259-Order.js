@@ -13,7 +13,7 @@ module.exports = {
     type : Sequelize.INTEGER,
     allowNull : false,
     references : {
-      model : "user",
+      model : "users",
       key : "id_user"
     }
   },
@@ -28,6 +28,18 @@ module.exports = {
       isIn : [["pending", "paid", "canceled" ]]
     }
   },
+  createdAt : {
+      type : Sequelize.DATE,
+      allowNull : false
+    },
+    updatedAt : {
+      type : Sequelize.DATE,
+      allowNull : false,
+    },
+    deletedAt : {
+      type : Sequelize.DATE,
+      allowNull : true
+    }
     })
   },
 

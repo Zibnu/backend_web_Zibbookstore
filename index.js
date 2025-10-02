@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const db = require("./src/models")
 require("dotenv").config();
 
 app.use(express.json({}));
@@ -13,9 +14,11 @@ const autRoutes = require("./src/routes/authRouter");
 app.use('/auth', autRoutes);
 
 // Testing models
-const db = require("./src/models");
-console.log("Available Models:", Object.keys(db));
-console.log("Order Model:", db.Order);
-console.log("OrderItem Model:", db.OrderItem);
+// const dbTest = require("./src/models");
+// console.log("Available Models:", Object.keys(dbTest));
+// console.log("Order Model:", dbTest.Order);
+// console.log("OrderItem Model:", dbTest.OrderItem);
+
+
 
 app.listen(PORT, () => console.log("Server is Running"));

@@ -12,7 +12,19 @@ module.exports = {
         name_category : {
           type : Sequelize.STRING(100),
           allowNull : false
-        }
+        },
+        createdAt : {
+      type : Sequelize.DATE,
+      allowNull : false
+    },
+    updatedAt : {
+      type : Sequelize.DATE,
+      allowNull : false,
+    },
+    deletedAt : {
+      type : Sequelize.DATE,
+      allowNull : true
+    }
     })
   },
 

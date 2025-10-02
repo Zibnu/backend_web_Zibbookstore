@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: "user",
+          model: "users",
           key: "id_user",
         },
       },
@@ -37,9 +37,10 @@ module.exports = (sequelize, DataTypes) => {
   Order.associate = (models) => {
     Order.hasMany(models.OrderItem, {
       foreignKey: "order_id",
-      as: "order_item",
+      as: "order_items",
     });
     Order.belongsTo(models.User, { foreignKey: "user_id", as: "user" });
+    Order.hasMany(models.Shipment, { foreignKey : "order_id", as : "shipments"})
   };
   return Order;
 };

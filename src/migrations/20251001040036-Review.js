@@ -13,7 +13,7 @@ module.exports = {
     type : Sequelize.INTEGER,
     allowNull : false,
     references : {
-      model : "user",
+      model : "users",
       key : "id_user",
     },
   },
@@ -27,11 +27,22 @@ module.exports = {
   },
   rating : {
     type : Sequelize.INTEGER,
-    allowNull : false,
   },
-  Comment : {
+  comment : {
     type : Sequelize.TEXT,
   },
+  createdAt : {
+      type : Sequelize.DATE,
+      allowNull : false
+    },
+    updatedAt : {
+      type : Sequelize.DATE,
+      allowNull : false,
+    },
+    deletedAt : {
+      type : Sequelize.DATE,
+      allowNull : true
+    }
     })
   },
 

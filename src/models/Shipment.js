@@ -7,13 +7,21 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true,
       },
-      addres_id: {
+      address_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: "addres",
+          model: "address",
           key: "id_address",
         },
+        order_id : {
+          type : DataTypes.INTEGER,
+          allowNull : false,
+          references : {
+            model : "orders",
+            key : "id_order"
+          }
+        }
       },
       status: {
         type: DataTypes.STRING(20),
@@ -31,7 +39,8 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
   Shipment.associate = (models) => {
-    Shipment.belongsTo(models.Address, { foreignKey: "id_addres", as: "addres" });
+    Shipment.belongsTo(models.Address, { foreignKey: "address_id", as: "address" });
+    Shipment.belongsTo(models.Order, {foreignKey : "order_id", as : "order"})
   };
   return Shipment;
 };

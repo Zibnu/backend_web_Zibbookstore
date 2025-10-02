@@ -42,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
   );
   OrderItem.associate = (models) => {
     OrderItem.belongsTo(models.Book, { foreignKey: "book_id", as: "book" });
-    OrderItem.belongsTo(models.Order, { foreignKey: "order_id", as: "Order" });
+    OrderItem.belongsTo(models.Order, { foreignKey: "order_id", as: "order" });
   };
   return OrderItem;
 };
