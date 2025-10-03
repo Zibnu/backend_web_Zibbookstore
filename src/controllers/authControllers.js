@@ -34,7 +34,7 @@ const { Association } = require("sequelize");
         username,
         email,
         password : hashPassword,
-        role : 'user',
+        role : "user",
         isActive : true,
       });
 
@@ -112,19 +112,19 @@ const { Association } = require("sequelize");
         );
 
         // User data untuk Response
-        const userResponse = {
-          id_user : user.id_user,
-          username : user.username,
-          email : user.email,
-          role : user.role,
-          sts : user.isActive,
-        };
+        // const userResponse = {
+        //   id_user : user.id_user,
+        //   username : user.username,
+        //   email : user.email,
+        //   role : user.role,
+        //   sts : user.isActive,
+        // };
 
         return res.status(200).json({
           success : true,
           message : "Login SuccessFul",
           data : {
-            user : userResponse,
+            // user : userResponse,
             token,
           }
         });
@@ -144,13 +144,14 @@ exports.getProfile = async (req, res) => {
     const userId = req.user.id_user;//sudah diisi oleh middleware 
 
     const user = await User.findByPk(userId, {
-      attributes : { exclude :["password"]}, //pw not show
-      include : [
-        {
-          Association : "address",
-          attributes : [ "id_address", "full_name", "phone", "street", "postal_code", "provinces"],
-        },
-      ],
+      attributes : ["id_user", "username", "email", "role", "isActive"]
+      // attributes : { exclude :["password"]}, //pw not show
+      // include : [
+      //   {
+      //     Association : "address",
+      //     attributes : [ "id_address", "full_name", "phone", "street", "postal_code", "provinces"],
+      //   },
+      // ],
     });
 
     if(!user) {
@@ -173,3 +174,112 @@ exports.getProfile = async (req, res) => {
     });
   };
 };
+
+// Log Out
+exports.logout = async ( req, res) => {
+  try {
+    // Hanya response karena menggunakan JWT stateless jadi remove token ada di FRONT END
+
+    return res.status(200).json({
+      success : true,
+      message : "Logout SuccessFul"
+    });
+  } catch (error) {
+    console.error("Logout Error", error);
+    return res.status(500).json({
+      success : false,
+      message : "Internal Server Error",
+      error : error.message
+    });
+  };
+};
+
+// Update Profile
+// exports.updateProfile = async (req, res) => {
+//   try {
+//     const userId = req.user.id_user;
+//     const { username } = req.body;
+
+//     if(!username) {
+//       return res.status(400).json({
+//         success : false,
+//         message : "Username Required!!!!!!"
+//       });
+//     }
+
+//     const user = await User.findByPk(userId);
+//     if(!user) {
+//       return res.status(404).json({
+//         success : false,
+//         message : "User Not Found"
+//       });
+//     }
+
+//     // Update Username
+//     user.username = username;
+//     await user.save();
+
+//     const userResponse = {
+//       id_user : user.id_user,
+//       username : user.username,
+//       email : user.email,
+//       role : user.role
+//     };
+//     return res.status(200).json({
+//       success : true,
+//       message : "Profile Updated SuccessFul",
+//       data : "userResponse",
+//     });
+//   } catch (error) {
+//     console.error("Updated Profile Error", error);
+//     return res.status(500).json({
+//       success : false,
+//       message : "In Server Error",
+//       error : error.message,
+//     });
+//   }
+// };
+
+// // Change PW
+// exports.changePw = async (req, res) => {
+//   try {
+//     const userId = req.user.id_user;
+//     const { oldPw, newPw} = req.body;
+
+//     if(!oldPw || !newPw) {
+//       return res.status(400).json({
+//         success : false,
+//         message : "Your input is Null",
+//       });
+//     }
+
+//     const user = await User.findByPk(userId);
+//     if(!user) {
+//       return res.status(404).json({
+//         success : false,
+//         message : "User Not Found",
+//       });
+
+//       // Verifikasi oldPw 
+//       const isPasswordValid = await bcrypt.compare(oldPw, user.password);
+//       if(!isPasswordValid) {
+//         return res.status(401).json({
+//           success : false,
+//           message : "Old Password Is Wrong",
+//         });
+//       }
+
+//       // Hash new PW
+//       const hashNewPw = await bcrypt.hash(newPw, 10);
+//       user.password = hashNewPw;
+//       await user.save();
+
+//       return res.status(200).json({
+//         success : true,
+//         message : password
+//       })
+//     }
+//   } catch (error) {
+    
+//   }
+// }
