@@ -1,10 +1,13 @@
 const express = require("express");
 const app = express();
+const path = require("path")
 require("dotenv").config();
 
 // middleware
 app.use(express.json({}));
 app.use(express.urlencoded({ extended : true}))
+
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // Routes
 const autRoutes = require("./src/routes/authRouter");
 const bookRoutes = require("./src/routes/bookRouter");

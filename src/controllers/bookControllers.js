@@ -179,6 +179,9 @@ exports.getBookId = async (req, res) => {
 // Create Book ✔️👍
 exports.createBook = async (req, res) => {
   try {
+    console.log("method", req.method, "url", req.originalUrl);
+    console.log("req.body", req.body);
+    console.log("req.file", req.file &&  req.file.filename);
     const {
       title,
       author,
@@ -186,7 +189,6 @@ exports.createBook = async (req, res) => {
       category_id,
       price_cents,
       stock,
-      cover_path,
     } = req.body;
 
     // validation if your input null
@@ -196,8 +198,7 @@ exports.createBook = async (req, res) => {
       !description ||
       !category_id ||
       !price_cents ||
-      !stock ||
-      !cover_path
+      !stock 
     ) {
       return res.status(400).json({
         success: false,
@@ -214,15 +215,20 @@ exports.createBook = async (req, res) => {
       });
     }
 
+    let cover_url = null;
+    if(req.file) {
+      cover_url = `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`;
+    }
+
     // create new book
     const newBook = await Book.create({
       title,
       author,
       description,
-      category_id,
+      category_id : parseInt(category_id),
       price_cents: parseInt(price_cents),
       stock: stock ? parseInt(stock) : 0,
-      cover_path,
+      cover_path : cover_url,
     });
 
     // fetch Book with category
@@ -262,7 +268,6 @@ exports.updateBook = async (req, res) => {
       category_id,
       price_cents,
       stock,
-      cover_path,
     } = req.body;
 
     const book = await Book.findByPk(id);
@@ -272,6 +277,11 @@ exports.updateBook = async (req, res) => {
         message: "Book Not Found",
       });
     }
+    // Upload file
+    let cover_url = null;
+    if(req.file) {
+      cover_url = `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`;
+    };
 
     // check if category 404
     if (category_id) {
@@ -289,10 +299,10 @@ exports.updateBook = async (req, res) => {
       title: title || book.title,
       author: author || book.author,
       description: description !== undefined ? description : book.description,
-      category_id: category_id || book.category_id,
+      category_id: parseInt(category_id) || book.category_id,
       price_cents: price_cents ? parseInt(price_cents) : book.price_cents,
       stock: stock !== undefined ? parseInt(stock) : book.stock,
-      cover_path: cover_path || book.cover_path,
+      cover_path: cover_url || book.cover_path,
     });
 
     // fetch update book with category
