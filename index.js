@@ -7,14 +7,17 @@ require("dotenv").config();
 app.use(express.json({}));
 app.use(express.urlencoded({ extended : true}))
 
+
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // Routes
 const autRoutes = require("./src/routes/authRouter");
 const bookRoutes = require("./src/routes/bookRouter");
-const categoryRoutes = require("./src/routes/categoryRouter")
+const categoryRoutes = require("./src/routes/categoryRouter");
+const orderRoutes = require("./src/routes/orderRouter");
 app.use('/api/auth', autRoutes);
 app.use('/api/books', bookRoutes);
 app.use("/api/categories", categoryRoutes);
+app.use("/api/order", orderRoutes); 
 
 // Testing models
 // const dbTest = require("./src/models");

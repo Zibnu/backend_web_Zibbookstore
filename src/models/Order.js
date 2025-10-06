@@ -40,7 +40,8 @@ module.exports = (sequelize, DataTypes) => {
       as: "order_items",
     });
     Order.belongsTo(models.User, { foreignKey: "user_id", as: "user" });
-    Order.hasMany(models.Shipment, { foreignKey : "order_id", as : "shipments"})
+    Order.hasMany(models.Shipment, { foreignKey : "order_id", as : "shipments"});
+    Order.hasMany(models.OrderItem, { foreignKey : "order_id", as : "orderItems"})
   };
   return Order;
 };
