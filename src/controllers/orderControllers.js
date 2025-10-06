@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const {
   sequelize,
   User,
@@ -91,7 +92,7 @@ exports.createOrder = async (req, res) => {
       {
         user_id: userId,
         total_cents: totalCents,
-        status: "pending",
+        status: "paid",
       },
       { transaction }
     );
@@ -287,8 +288,8 @@ exports.getAllOrders = async (req, res) =>{
 
     if( startDate || endDate){
       where.createdAt = {};
-      if(startDate) where.createdAt[require('sequelize'.Op.gte)] = new Date(startDate);
-      if(endDate) where.createdAt[require('sequelize'.Op.lte)] = new Date(endDate);
+      if(startDate) where.createdAt[Op.gte] = new Date(startDate);
+      if(endDate) where.createdAt[Op.lte] = new Date(endDate);
     }
 
     const offset = (parseInt(page) - 1) * parseInt(limit);
@@ -453,7 +454,7 @@ exports.cancelOrder = async (req, res) => {
   }
 };
 
-// Get Order Stastic(admin)
+// Get Order Stastic(admin)✔️👏
 exports.getOrderStatistic = async (req, res) => {
   try {
     const { startDate, endDate} = req.query;
@@ -462,8 +463,8 @@ exports.getOrderStatistic = async (req, res) => {
     const where = {};
     if( startDate || endDate){
       where.createdAt = {};
-      if(startDate) where.createdAt[require('sequelize').Op.gte] = new Date(startDate);
-      if(endDate) where.createdAt[require('sequelize').Op.lte] = new Date(endDate);
+      if(startDate) where.createdAt[Op.gte] = new Date(startDate);
+      if(endDate) where.createdAt[Op.lte] = new Date(endDate);
     }
 
     // Count order by status
@@ -484,9 +485,11 @@ exports.getOrderStatistic = async (req, res) => {
     const revenueData = await Order.findOne( {
       where : {
         ...where,
-        status : ["paid", "pending", "canceled"],
+        status :{[Op.in] :["paid", "pending", "canceled"]},
       },
-      attributes : [[sequelize.fn("SUM", sequelize.col("total_cents")), ["total_revenue"]]],
+      attributes : [
+        [sequelize.fn("SUM", sequelize.col("total_cents")), "total_revenue"],
+      ],
       raw : true,
     });
 
