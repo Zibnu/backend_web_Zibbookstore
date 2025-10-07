@@ -1,4 +1,4 @@
-const { sequelize ,Order, Shipment, OrderItem , Book, Payment} = require("../models");
+const { sequelize ,Order, Shipment, OrderItem , Book, Payment, User} = require("../models");
 const { Op } = require("sequelize");
 // User✔️🔥
 exports.createPayment = async (req, res) => {
@@ -92,10 +92,10 @@ exports.createPayment = async (req, res) => {
     });
   }
 };
-// Admin
+// Admin✔️🔥
 exports.getAllPayment = async (req,res) => {
   try {
-    const payment = await Payment.findAll({
+    const payments = await Payment.findAll({
       include : [
         {
           model : Order,
@@ -109,8 +109,96 @@ exports.getAllPayment = async (req,res) => {
           ],
         },
       ],
+      order : [["createdAt", "DESC"]],
+    });
+
+    return res.status(200).json({
+      success : true,
+      message : "Success Get Payment Data",
+      data : payments
+    })
+  } catch (error) {
+    console.error("Get ALl Payment ERROR", error);
+    return res.status(500).json({
+      succcess : false,
+      message : "Internal Server ERROR",
+      error : error.message,
+    });
+  }
+};
+
+// Get Payment by Id✔️🔥
+exports.getPaymentById = async (req,res) => {
+  try {
+    const { id } = req.params;
+
+    const payment = await Payment.findByPk(id, {
+      include : [
+        {
+          model : Order,
+          as : "order",
+          include : [
+            {
+              model : OrderItem,
+              as : "orderItems",
+              include : [
+                {
+                  model : Book,
+                  as : "book"
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+
+    if(!payment) {
+      return res.status(404).json({
+        success : false,
+        message : "Payment Not Found"
+      });
+    }
+
+    return res.status(200).json({
+      succcess : true,
+      message : "Data Payment load ....",
+      data : payment
+    })
+  } catch (error) {
+    console.error("Get Payment By Id ERROR", error);
+    return res.status(500).json({
+      succcess : false,
+      message : "Internal Server Error",
+      error : error.message,
+    });
+  }
+};
+
+exports.deletePayment = async ( req, res ) => {
+  try {
+    const { id } = req.params;
+
+    const payment = await Payment.findByPk(id);
+    if(!payment) {
+      return res.status(404).json({
+        succcess : false,
+        message : "Payment Not Found",
+      });
+    }
+
+    await payment.destroy();
+
+    return res.status(200).json({
+      succcess : true,
+      message : "Payment has been Delete",
     });
   } catch (error) {
-    
+    console.error("Delete Payment ERROR", error);
+    return res.status(500).json({
+      success : false,
+      message : "Internal Server Error",
+      error : error.message,
+    });
   }
-}
+};
