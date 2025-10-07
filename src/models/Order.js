@@ -41,7 +41,8 @@ module.exports = (sequelize, DataTypes) => {
     });
     Order.belongsTo(models.User, { foreignKey: "user_id", as: "user" });
     Order.hasMany(models.Shipment, { foreignKey : "order_id", as : "shipments"});
-    Order.hasMany(models.OrderItem, { foreignKey : "order_id", as : "orderItems"})
+    Order.hasMany(models.OrderItem, { foreignKey : "order_id", as : "orderItems"});
+    Order.hasOne(models.Payment, { foreignKey : "order_id", as : "payment"});
   };
   return Order;
 };

@@ -179,9 +179,6 @@ exports.getBookId = async (req, res) => {
 // Create Book ✔️👍
 exports.createBook = async (req, res) => {
   try {
-    console.log("method", req.method, "url", req.originalUrl);
-    console.log("req.body", req.body);
-    console.log("req.file", req.file &&  req.file.filename);
     const {
       title,
       author,

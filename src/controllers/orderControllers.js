@@ -92,7 +92,7 @@ exports.createOrder = async (req, res) => {
       {
         user_id: userId,
         total_cents: totalCents,
-        status: "paid",
+        status: "pending",
       },
       { transaction }
     );
