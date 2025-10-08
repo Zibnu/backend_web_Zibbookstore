@@ -151,6 +151,13 @@ exports.updateShipment = async (req, res) => {
       });
     }
 
+    if(["canceled", "delivery"].includes(shipment.status)) {
+      return res.status(400).json({
+        success : false,
+        message : `Shipment with Status ${shipment.status} canot be update.`,
+      });
+    }
+
     await shipment.update({ status });
 
     return res.status(200).json({
