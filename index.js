@@ -15,11 +15,13 @@ const bookRoutes = require("./src/routes/bookRouter");
 const categoryRoutes = require("./src/routes/categoryRouter");
 const orderRoutes = require("./src/routes/orderRouter");
 const paymentRoutes = require("./src/routes/paymentRouter");
+const addressRoutes = require("./src/routes/addressRouter");
 app.use('/api/auth', autRoutes);
 app.use('/api/books', bookRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/order", orderRoutes); 
 app.use("/api/payment", paymentRoutes);
+app.use("/api/address/", addressRoutes);
 
 // Testing models
 // const dbTest = require("./src/models");
