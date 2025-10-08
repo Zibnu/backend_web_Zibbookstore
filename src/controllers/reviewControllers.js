@@ -1,4 +1,4 @@
-const { Review, Book, User, sequelize } = require("../models");
+const { Review, Book, User, sequelize, Order, OrderItem, Shipment } = require("../models");
 const { Op } = require("sequelize");
 // ✔️🔥
 exports.createReview = async (req, res) => {
@@ -29,6 +29,27 @@ exports.createReview = async (req, res) => {
       return res.status(404).json({
         success : false,
         message : "Book Not Found",
+      });
+    }
+
+    const purchased = await Order.findOne({
+      where : {
+        user_id : userId,
+        status : "paid",
+      },
+      include : [
+        {
+          model : OrderItem,
+          as : "orderItems",
+          where : { book_id },
+        },
+      ],
+    });
+
+    if(!purchased) {
+      return res.status(403).json({
+        success : false,
+        message : "You can Review when you buy this Book",
       });
     }
 
