@@ -22,6 +22,7 @@ const paymentRoutes = require("./src/routes/paymentRouter");
 const addressRoutes = require("./src/routes/addressRouter");
 const shipmentRoutes = require("./src/routes/shipmentRouter");
 const reviewRoutes = require("./src/routes/reviewRouter");
+const userRoutes = require("./src/routes/userRouter");
 app.use('/api/auth', autRoutes);
 app.use('/api/books', bookRoutes);
 app.use("/api/categories", categoryRoutes);
@@ -30,6 +31,7 @@ app.use("/api/payment", paymentRoutes);
 app.use("/api/address", addressRoutes);
 app.use("/api/shipment", shipmentRoutes);
 app.use("/api/review", reviewRoutes);
+app.use("/api/user", userRoutes);
 
 // Testing models
 // const dbTest = require("./src/models");
