@@ -126,6 +126,11 @@ const { Association } = require("sequelize");
           data : {
             // user : userResponse,
             token,
+            user : {
+              id_user : user.id_user,
+              email : user.email,
+              role : user.role
+            },
           }
         });
     } catch (error) {
