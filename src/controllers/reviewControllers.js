@@ -141,7 +141,7 @@ exports.getMyReview = async (req, res) => {
         {
           model : Book,
           as : "book",
-          attributes : ["id_book", "title", "author"],
+          attributes : ["id_book", "title", "cover_path"],
         },
       ],
     });
