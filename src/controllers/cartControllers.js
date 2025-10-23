@@ -11,8 +11,10 @@ exports.getCart = async (req, res) => {
           model : Book,
           as : "book",
           attributes : ["id_book", "title", "author", "price_cents", "cover_path"],
+          order : [["id_book" , "ASC"]]
         },
       ],
+      order : [["id_cart", "ASC"]]
     });
 
     return res.status(200).json({
@@ -54,7 +56,8 @@ exports.addToCart = async (req, res) => {
     }
 
     const existingCart = await Cart.findOne({
-      where : { user_id : userId, book_id}
+      where : { user_id : userId, book_id},
+      order : [["id_cart", "ASC"]]
     });
 
     if(existingCart) {
