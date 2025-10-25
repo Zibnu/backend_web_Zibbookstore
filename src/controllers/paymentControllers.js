@@ -1,4 +1,4 @@
-const { sequelize ,Order, Shipment, OrderItem , Book, Payment, User} = require("../models");
+const { sequelize ,Order, Shipment, OrderItem , Book, Payment, User, Cart} = require("../models");
 const { Op } = require("sequelize");
 // User✔️🔥
 exports.createPayment = async (req, res) => {
@@ -69,6 +69,14 @@ exports.createPayment = async (req, res) => {
       },
       { transaction }
     );
+
+    await Cart.destroy({
+      where : {
+        user_id : userId,
+        book_id : order.orderItems.map((item) => item.book_id),
+      },
+      transaction,
+    });
 
     await order.update({ status : "paid"}, {transaction});
 
