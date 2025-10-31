@@ -1,7 +1,8 @@
   const bcrypt = require("bcrypt");
   const jwt = require("jsonwebtoken");
   const { User } = require("../models");
-const { Association } = require("sequelize");
+  const { Association } = require("sequelize");
+  const { sendEmail } = require("../utils/emailServices")
 
   const SECRET = process.env.SECRET_KEYS;
 
@@ -11,7 +12,7 @@ const { Association } = require("sequelize");
       const { username, email, password} = req.body;
       // validasi input
       if(!username || !email || !password) {
-        res.status(400).json({
+        return res.status(400).json({
           success : false,
           message : "Username, email and password REQUIRED!!"
         });
@@ -20,7 +21,7 @@ const { Association } = require("sequelize");
       // Cek apakah email sudah terdapftar
       const existingUser = await User.findOne({ where : { email }});
       if(existingUser) {
-        res.status(409).json({
+        return res.status(409).json({
           success : false,
           message : "email already registed"
         });
@@ -37,6 +38,13 @@ const { Association } = require("sequelize");
         role : "user",
         isActive : true,
       });
+
+      await sendEmail(
+        newUser.email,
+        "Selamat Datang di ZibBookstore 🎉",
+        "WelcomeEmail",
+        {username : newUser.username}
+      )
 
       // Response
       const userResponse = {

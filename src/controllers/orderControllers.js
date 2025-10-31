@@ -8,6 +8,7 @@ const {
   Book,
   Address,
 } = require("../models");
+const { sendEmail } = require("../utils/emailServices");
 
 // Buat order ( user )✔️👏
 exports.createOrder = async (req, res) => {
@@ -142,6 +143,25 @@ exports.createOrder = async (req, res) => {
         },
       ],
     });
+
+    const user = await User.findByPk(userId);
+
+    const emailData = {
+      full_name : user.username,
+      address : `${address.street}, ${address.provinces}, ${address.postal_code}`,
+      items : completeOrder.orderItems.map((item) => ({
+        title : item.book.title,
+        // price_cents : item.book.price_cents,
+      })),
+      total_price : completeOrder.total_cents,
+    };
+
+    await sendEmail(
+      user.email,
+      "Terimakasih Telah Berbelanja Selamat Menikmati Keseruannya",
+      "OrderEmail",
+      emailData
+    )
 
     return res.status(201).json({
       success: true,
