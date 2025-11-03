@@ -16,7 +16,7 @@ function OrderEmail({full_name, address ,items, total_price}) {
         </ul>
         <p>Alamat Penerima {address}</p>
         <p>Total Pembayaran: <b>Rp{Number(total_price).toLocaleString("id-ID")}</b></p>
-        <p>Kami Akan Segere Memproses Pesanan Kamu 📦</p>
+        <p>Kami Akan Segera Memproses Pesanan Kamu 📦</p>
         <hr />
         <p style={{ fontSize : "12px", color : "#333"}}>
           &copy; {new Date().getFullYear()} Layanan kami. Semua hak dilindungi.

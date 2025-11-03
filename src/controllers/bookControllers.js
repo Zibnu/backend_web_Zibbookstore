@@ -1,5 +1,7 @@
 const { Book, Category, Review, User } = require("../models");
 const { Op, Association } = require("sequelize");
+const fs = require("fs");
+const path = require("path");
 
 // get All books✔️
 exports.getAllBooks = async (req, res) => {
@@ -277,6 +279,21 @@ exports.updateBook = async (req, res) => {
     // Upload file
     let cover_url = null;
     if(req.file) {
+      //Mengambil nama file lama dari URL lama
+      const oldImageName = path.basename(book.cover_path);
+      const oldImagePath = path.join(__dirname, "../../uploads", oldImageName);
+
+      // Hapus file lama jika ada
+      try {
+        if(fs.existsSync(oldImagePath)) {
+          await fs.promises.unlink(oldImagePath);
+          console.log("Berhasil Menghapus file lama")
+        };
+      } catch (error) {
+        console.error("Gagal Menghapus File Lama by Update", error);
+      }
+
+      // Genereate new url
       cover_url = `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`;
     };
 
@@ -381,6 +398,18 @@ exports.deleteBook = async (req, res) => {
         success : false,
         message : "Book not found",
       });
+    }
+
+    const oldImageName = path.basename(book.cover_path);
+    const oldImagePath = path.join(__dirname, "../../uploads", oldImageName);
+
+    try {
+      if(fs.existsSync(oldImagePath)) {
+        await fs.promises.unlink(oldImagePath);
+        console.log("File Berhasil terhapus");
+      };
+    } catch (error) {
+      console.error("Gagal Menghapus file cover_path from Delete", error);
     }
 
     // Soft delete ( not Permanent , syarat Paranoid : true, restore() untuk mengembalikan data) 
