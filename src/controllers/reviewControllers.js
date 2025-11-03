@@ -32,26 +32,26 @@ exports.createReview = async (req, res) => {
       });
     }
 
-    const purchased = await Order.findOne({
-      where : {
-        user_id : userId,
-        status : "paid",
-      },
-      include : [
-        {
-          model : OrderItem,
-          as : "orderItems",
-          where : { book_id },
-        },
-      ],
-    });
+    // const purchased = await Order.findOne({
+    //   where : {
+    //     user_id : userId,
+    //     status : "paid",
+    //   },
+    //   include : [
+    //     {
+    //       model : OrderItem,
+    //       as : "orderItems",
+    //       where : { book_id },
+    //     },
+    //   ],
+    // });
 
-    if(!purchased) {
-      return res.status(403).json({
-        success : false,
-        message : "You can Review when you buy this Book",
-      });
-    }
+    // if(!purchased) {
+    //   return res.status(403).json({
+    //     success : false,
+    //     message : "You can Review when you buy this Book",
+    //   });
+    // }
 
     const existingReview = await Review.findOne({
       where : { book_id , user_id : userId },
