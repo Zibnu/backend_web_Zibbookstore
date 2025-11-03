@@ -207,6 +207,7 @@ exports.getMyOrders = async (req, res) => {
             {
               model : Book,
               as : "book",
+              paranoid : false,
               attributes: ["id_book", "title", "author", "cover_path"],
             }
           ]
@@ -258,6 +259,7 @@ exports.getOrderById = async (req, res) => {
             {
               model: Book,
               as: "book",
+              paranoid : false,
               attributes: [
                 "id_book",
                 "title",

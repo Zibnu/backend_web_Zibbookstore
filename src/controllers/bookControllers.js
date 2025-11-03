@@ -400,17 +400,17 @@ exports.deleteBook = async (req, res) => {
       });
     }
 
-    const oldImageName = path.basename(book.cover_path);
-    const oldImagePath = path.join(__dirname, "../../uploads", oldImageName);
+    // const oldImageName = path.basename(book.cover_path);
+    // const oldImagePath = path.join(__dirname, "../../uploads", oldImageName);
 
-    try {
-      if(fs.existsSync(oldImagePath)) {
-        await fs.promises.unlink(oldImagePath);
-        console.log("File Berhasil terhapus");
-      };
-    } catch (error) {
-      console.error("Gagal Menghapus file cover_path from Delete", error);
-    }
+    // try {
+    //   if(fs.existsSync(oldImagePath)) {
+    //     await fs.promises.unlink(oldImagePath);
+    //     console.log("File Berhasil terhapus");
+    //   };
+    // } catch (error) {
+    //   console.error("Gagal Menghapus file cover_path from Delete", error);
+    // }
 
     // Soft delete ( not Permanent , syarat Paranoid : true, restore() untuk mengembalikan data) 
     await book.destroy();
