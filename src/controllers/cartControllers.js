@@ -10,6 +10,7 @@ exports.getCart = async (req, res) => {
         {
           model : Book,
           as : "book",
+          paranoid : false,
           attributes : ["id_book", "title", "author", "price_cents", "cover_path"],
           order : [["id_book" , "ASC"]]
         },
