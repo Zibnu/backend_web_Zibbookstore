@@ -62,7 +62,7 @@ const {Op} = require("sequelize");
 // Admin✔️🔥
 exports.getAllShipment = async (req, res) => {
   try {
-    const { page = 1, limit = 20, status, startDate, endDate} = req.query;
+    const { page = 1, limit = 12, status, startDate, endDate} = req.query;
     const where = {};
 
     if(status) where.status = status;

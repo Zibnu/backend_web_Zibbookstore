@@ -302,7 +302,7 @@ exports.getOrderById = async (req, res) => {
 // Cek semua order ( Admin )✔️👏
 exports.getAllOrders = async (req, res) =>{
   try {
-    const { page = 1, limit = 20, status, user_id, startDate, endDate} = req.query
+    const { page = 1, limit = 12, status, user_id, startDate, endDate} = req.query
 
     const where = {};
     if( status ) where.status = status;
