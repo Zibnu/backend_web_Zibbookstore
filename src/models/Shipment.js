@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
           model: "address",
           key: "id_address",
         },
+        },
         order_id : {
           type : DataTypes.INTEGER,
           allowNull : false,
@@ -21,8 +22,7 @@ module.exports = (sequelize, DataTypes) => {
             model : "orders",
             key : "id_order"
           }
-        }
-      },
+        },
       status: {
         type: DataTypes.STRING(20),
         defaultValue: "processing",

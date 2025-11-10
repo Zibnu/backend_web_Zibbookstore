@@ -35,12 +35,12 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
   Order.associate = (models) => {
-    Order.hasMany(models.OrderItem, {
-      foreignKey: "order_id",
-      as: "order_items",
-    });
+    // Order.hasMany(models.OrderItem, {
+    //   foreignKey: "order_id",
+    //   as: "order_items",
+    // });
     Order.belongsTo(models.User, { foreignKey: "user_id", as: "user" });
-    Order.hasMany(models.Shipment, { foreignKey : "order_id", as : "shipments"});
+    Order.hasOne(models.Shipment, { foreignKey : "order_id", as : "shipments"});
     Order.hasMany(models.OrderItem, { foreignKey : "order_id", as : "orderItems"});
     Order.hasOne(models.Payment, { foreignKey : "order_id", as : "payment"});
   };
