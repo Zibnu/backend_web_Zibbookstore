@@ -173,7 +173,7 @@ exports.getAllUsers = async (req, res) => {
 
     return res.status(200).json({
       success : true,
-      Data : {
+      data : {
         users,
         pagination : {
           currentPage : parseInt(page),

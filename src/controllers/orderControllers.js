@@ -320,6 +320,7 @@ exports.getAllOrders = async (req, res) =>{
       where,
       limit : parseInt(limit),
       offset,
+      distinct : true,
       order : [["createdAt", "DESC"]],
       include : [
         {

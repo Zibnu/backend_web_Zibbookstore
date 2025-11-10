@@ -24,6 +24,7 @@ const shipmentRoutes = require("./src/routes/shipmentRouter");
 const reviewRoutes = require("./src/routes/reviewRouter");
 const userRoutes = require("./src/routes/userRouter");
 const cartRoutes = require("./src/routes/cartRouter");
+const revenueRouter = require("./src/routes/revenueRouter");
 app.use('/api/auth', autRoutes);
 app.use('/api/books', bookRoutes);
 app.use("/api/categories", categoryRoutes);
@@ -34,6 +35,7 @@ app.use("/api/shipment", shipmentRoutes);
 app.use("/api/review", reviewRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/cart", cartRoutes);
+app.use("/api/dashboard", revenueRouter);
 
 // Testing models
 // const dbTest = require("./src/models");
