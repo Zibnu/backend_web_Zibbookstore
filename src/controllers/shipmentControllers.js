@@ -67,6 +67,12 @@ exports.getAllShipment = async (req, res) => {
 
     if(status) where.status = status;
 
+    // if(search) {
+    //   where.status = {
+    //     [Op.iLike] : `%${search}%`
+    //   }
+    // }
+
     if(startDate || endDate) {
       where.createdAt = {};
       if(startDate) where.createdAt[Op.gte] = new Date(startDate);

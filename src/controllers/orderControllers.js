@@ -302,11 +302,11 @@ exports.getOrderById = async (req, res) => {
 // Cek semua order ( Admin )✔️👏
 exports.getAllOrders = async (req, res) =>{
   try {
-    const { page = 1, limit = 12, status, user_id, startDate, endDate} = req.query
+    const { page = 1, limit = 12, shipment_status,  startDate, endDate} = req.query
 
     const where = {};
-    if( status ) where.status = status;
-    if(user_id) where.user_id = user_id;
+    // if( status ) where.status = status;
+    // if(user_id) where.user_id = user_id;
 
     if( startDate || endDate){
       where.createdAt = {};
@@ -336,6 +336,19 @@ exports.getAllOrders = async (req, res) =>{
               model : Book,
               as : "book",
               attributes : ["id_book", "title", "author"],
+            },
+          ],
+        },
+        {
+          model : Shipment,
+          as : "shipment",
+          required : shipment_status ? true : false,//menampilkan data status shipment berdasarkan filter
+          where : shipment_status ? { status : shipment_status} : undefined,//untk filter
+          include : [
+            {
+              model : Address,
+              as : "address",
+              attributes : ["full_name", "phone", "street", "postal_code", "provinces"],
             },
           ],
         },
