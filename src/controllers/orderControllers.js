@@ -348,7 +348,7 @@ exports.getAllOrders = async (req, res) =>{
             {
               model : Address,
               as : "address",
-              // paranoid : false,
+              paranoid : false,
               attributes : ["full_name", "phone", "street", "postal_code", "provinces"],
             },
           ],
