@@ -63,46 +63,92 @@ exports.getAllCategory = async (req, res) => {
 exports.getCategoryById = async (req, res) => {
   try {
     const { id } = req.params;
-    const { includeBooks } = req.query;
+    const { includeBooks, page = 1, limit = 10} = req.query;
 
-    let category;
+    const category = await Category.findByPk(id, {
+      attributes : ["id_category", "name_category", "createdAt", "updatedAt"],
+    });
 
-    if( includeBooks === "true") {
-      category = await Category.findByPk(id,{
-        include : [
-          {
-            model : Book,
-            as : "books",
-            attributes : [
-              "id_book",
-              "title",
-              "author",
-              "price_cents",
-              "stock",
-              "cover_path"
-            ],
-            where : { stock :{[require("sequelize").Op.gt] : 0}},
-            required : false,
-          },
-        ],
-      });
-    }else {
-      category = await Category.findByPk(id, {
-        attributes : ["id_category", "name_category", "createdAt", "updatedAt"],
-      });
-    }
-
-    if(!category){
+    if(!category) {
       return res.status(404).json({
         success : false,
-        message : "category not found",
+        message : "Category Not Found",
       });
     }
+
+    if(includeBooks !== "true") {
+      return res.status(200).json({
+        success : true,
+        data : category
+      });
+    }
+
+    // if( includeBooks === "true") {
+    //   category = await Category.findByPk(id,{
+    //     include : [
+    //       {
+    //         model : Book,
+    //         as : "books",
+    //         attributes : [
+    //           "id_book",
+    //           "title",
+    //           "author",
+    //           "price_cents",
+    //           "stock",
+    //           "cover_path"
+    //         ],
+    //         where : { stock :{[require("sequelize").Op.gt] : 0}},
+    //         required : false,
+    //       },
+    //     ],
+    //   });
+    // }else {
+    //   category = await Category.findByPk(id, {
+    //     attributes : ["id_category", "name_category", "createdAt", "updatedAt"],
+    //   });
+    // }
+
+    // if(!category){
+    //   return res.status(404).json({
+    //     success : false,
+    //     message : "category not found",
+    //   });
+    // }
+
+    const offset = (parseInt(page) - 1) * parseInt(limit);
+    const Op = require("sequelize").Op;
+
+    const {count, rows : books} = await Book.findAndCountAll({
+      where : {
+        category_id : id,
+        stock : { [Op.gt] : 0},
+      },
+      limit : parseInt(limit),
+      offset,
+      order : [["createdAt", "DESC"]],
+      attributes : [
+        "id_book",
+        "title",
+        "author",
+        "price_cents",
+        "stock",
+        "cover_path",
+      ],
+    });
 
     return res.status(200).json({
       success : true,
-      data : category,
-    })
+      data : {
+        category,
+        books,
+        pagination : {
+          currentPage : parseInt(page),
+          totalPages : Math.ceil(count / parseInt(limit)),
+          totalItems : count,
+          itemsPerPage : parseInt(limit),
+        },
+      },
+    });
   } catch (error) {
     console.error("Get Category by id ERROR", error);
     return res.status(500).json({

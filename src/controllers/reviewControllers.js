@@ -133,9 +133,15 @@ exports.getReviewsByBook = async (req, res) => {
 exports.getMyReview = async (req, res) => {
   try {
     const userId = req.user.id_user;
+    const {page = 1, limit = 3} = req.query;
 
-    const reviews = await Review.findAll({
+    const offset = (parseInt(page) - 1) * parseInt(limit);
+
+    const {count, rows : reviews} = await Review.findAndCountAll({
       where : {user_id : userId},
+      limit : parseInt(limit),
+      offset,
+      distinct : true,
       order : [["createdAt", "DESC"]],
       include : [
         {
@@ -148,7 +154,15 @@ exports.getMyReview = async (req, res) => {
 
     return res.status(200).json({
       success : true,
-      data : reviews,
+      data : {
+        reviews,
+        pagination : {
+          currentPage : parseInt(page),
+          totalPages : Math.ceil(count / parseInt(limit)),
+          totalItems : count,
+          itemsPerPage : parseInt(limit),
+        }
+      },
     });
   } catch (error) {
     console.error("Get My Review ERROR", error);

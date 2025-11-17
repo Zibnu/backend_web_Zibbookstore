@@ -185,7 +185,7 @@ exports.createOrder = async (req, res) => {
 exports.getMyOrders = async (req, res) => {
   try {
     const userId = req.user.id_user;
-    const { page = 1, limit = 10, status } = req.query;
+    const { page = 1, limit = 3, status } = req.query;
 
     const where = { user_id: userId };
     if (status) {
@@ -198,6 +198,7 @@ exports.getMyOrders = async (req, res) => {
       where,
       limit: parseInt(limit),
       offset,
+      distinct : true,
       order: [["createdAt", "DESC"]],
       include: [
         {
@@ -211,6 +212,11 @@ exports.getMyOrders = async (req, res) => {
               attributes: ["id_book", "title", "author", "cover_path"],
             }
           ]
+        },
+        {
+          model : Shipment,
+          as : "shipment",
+          attributes : ["status"],
         },
       ],
     });
