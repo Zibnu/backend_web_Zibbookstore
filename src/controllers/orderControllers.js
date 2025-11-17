@@ -1,4 +1,4 @@
-const { Op } = require("sequelize");
+const { Op, where } = require("sequelize");
 const {
   sequelize,
   User,
@@ -7,6 +7,7 @@ const {
   OrderItem,
   Book,
   Address,
+  Payment
 } = require("../models");
 const { sendEmail } = require("../utils/emailServices");
 
@@ -479,6 +480,14 @@ exports.cancelOrder = async (req, res) => {
         { where : {order_id : order.id_order},
         transaction}
       );
+
+      const payment = await Payment.findOne({
+        where : {order_id : order.id_order},
+        transaction,
+      });
+      if(payment && payment !== "failed") {
+        await payment.update({status : "failed"}, {transaction});
+      }
 
     await transaction.commit();
     return res.status(200).json({
