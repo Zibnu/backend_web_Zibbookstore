@@ -69,19 +69,26 @@ exports.getAllAddress = async ( req, res) => {
 exports.updateAddress = async ( req, res) => {
   try {
     const userId = req.user.id_user;
-    // const { id } = req.params;
+    const { id } = req.params;
     const { full_name, phone, street, postal_code, provinces} = req.body;
 
+    if(!id) {
+      return res.status(400).json({
+        success : false,
+        message : "Id Address Is Required!!!!",
+      });
+    }
+
     const address = await Address.findOne({
-      where : { user_id : userId},
+      where : { id_address : id ,user_id : userId},
     });
 
-    // if(!address) {
-    //   return res.status(404).json({
-    //     success : false,
-    //     message : "Address Not Found",
-    //   });
-    // }
+    if(!address) {
+      return res.status(404).json({
+        success : false,
+        message : "Address Not Found",
+      });
+    }
 
     await address.update({
       full_name : full_name || address.full_name,
@@ -97,7 +104,7 @@ exports.updateAddress = async ( req, res) => {
       data : address,
     });
   } catch (error) {
-    console.error("Update Address ERROR". error);
+    console.error("Update Address ERROR", error);
     return res.status(500).json({
       success : false,
       message : "Internal Server Error",
@@ -109,10 +116,25 @@ exports.updateAddress = async ( req, res) => {
 exports.deleteAddress = async (req, res) => {
   try {
     const userId = req.user.id_user;
+    const { id } = req.params;
+
+    if(!id) {
+      return res.status(400).json({
+        success : false,
+        message : "Id Address Required!!!",
+      });
+    }
 
     const address = await Address.findOne({
-      where : {user_id : userId},
+      where : {id_address : id, user_id : userId},
     });
+
+    if(!address){
+      return res.status(404).json({
+        success : false,
+        message : "Address Not Found",
+      });
+    }
 
     await address.destroy();
 

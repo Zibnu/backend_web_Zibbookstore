@@ -164,6 +164,21 @@ exports.updateShipment = async (req, res) => {
       });
     }
 
+    const allowedTransitions = {
+      processing : ["shipped", "canceled"],
+      shipped : ["delivery", "canceled"],
+      delivery : [],
+      canceled : [],
+    }
+
+    const currentStatus = shipment.status;
+    if(!allowedTransitions[currentStatus].includes(status)){
+      return res.status(400).json({
+        success : false,
+        message : `Status cannot change from ${currentStatus} to ${status} `
+      })
+    }
+
     await shipment.update({ status });
 
     return res.status(200).json({
