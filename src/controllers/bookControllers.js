@@ -224,9 +224,9 @@ exports.createBook = async (req, res) => {
       title,
       author,
       description,
-      category_id : parseInt(category_id),
-      price_cents: parseInt(price_cents),
-      stock: stock ? parseInt(stock) : 0,
+      category_id : parseInt(category_id, 10),
+      price_cents: parseInt(price_cents, 10),
+      stock: stock ? parseInt(stock, 10) : 0,
       cover_path : cover_url,
     });
 
@@ -313,9 +313,9 @@ exports.updateBook = async (req, res) => {
       title: title || book.title,
       author: author || book.author,
       description: description !== undefined ? description : book.description,
-      category_id: parseInt(category_id) || book.category_id,
-      price_cents: price_cents ? parseInt(price_cents) : book.price_cents,
-      stock: stock !== undefined ? parseInt(stock) : book.stock,
+      category_id: parseInt(category_id, 10) || book.category_id,
+      price_cents: price_cents ? parseInt(price_cents, 10) : book.price_cents,
+      stock: stock !== undefined ? parseInt(stock, 10) : book.stock,
       cover_path: cover_url || book.cover_path,
     });
 
