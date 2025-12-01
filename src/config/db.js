@@ -1,14 +1,15 @@
 require("dotenv").config();
 const { Sequelize } = require("sequelize");
 
-const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USER,
-  process.env.DB_PASS,
+const sequelize = new Sequelize(process.env.DB_URL,
   {
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
     dialect: process.env.DB_DIALECT,
+    dialectOptions: {
+      ssl : {
+        require : true,
+        rejectUnauthorized : false,
+      }
+    },
     logging: process.env.DB_LOGING, // for not spam query in your console
   }
 );
@@ -16,7 +17,7 @@ const sequelize = new Sequelize(
 // Testing connect
 sequelize.authenticate()
   .then(() => {
-    console.log("Connection to DB succes");
+    console.log("Connection to Supabase Postgre succes");
   })
   .catch(err => {
     console.error('Failed connect to DB', err);
