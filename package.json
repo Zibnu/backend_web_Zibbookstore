@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
+    "postinstall": "npx sequelize db:migrate",
     "dev": "nodemon index.js",
     "mg": "npx sequelize-cli migration:generate --name",
     "mg_run": "npx sequelize-cli db:migrate",

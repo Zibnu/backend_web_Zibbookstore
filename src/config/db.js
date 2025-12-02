@@ -4,12 +4,6 @@ const { Sequelize } = require("sequelize");
 const sequelize = new Sequelize(process.env.DB_URL,
   {
     dialect: process.env.DB_DIALECT,
-    dialectOptions: {
-      ssl : {
-        require : true,
-        rejectUnauthorized : false,
-      }
-    },
     logging: process.env.DB_LOGING, // for not spam query in your console
   }
 );
@@ -17,7 +11,7 @@ const sequelize = new Sequelize(process.env.DB_URL,
 // Testing connect
 sequelize.authenticate()
   .then(() => {
-    console.log("Connection to Supabase Postgre succes");
+    console.log("Connection to Railway Postgre success");
   })
   .catch(err => {
     console.error('Failed connect to DB', err);
