@@ -9,7 +9,7 @@
 // Register
   exports.register = async(req, res) => {
     try {
-      const { username, email, password} = req.body;
+      const { username, email, password, role} = req.body;
       // validasi input
       if(!username || !email || !password) {
         return res.status(400).json({
@@ -35,7 +35,7 @@
         username,
         email,
         password : hashPassword,
-        role : "user",
+        role : role,
         isActive : true,
       });
 
