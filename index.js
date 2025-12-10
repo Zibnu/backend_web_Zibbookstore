@@ -14,6 +14,7 @@ app.use(express.urlencoded({ extended : true}))
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // Routes
+const db = require("./src/models");
 const autRoutes = require("./src/routes/authRouter");
 const bookRoutes = require("./src/routes/bookRouter");
 const categoryRoutes = require("./src/routes/categoryRouter");
@@ -48,6 +49,7 @@ app.get("/", (req, res) => {
   res.json({ pesan: "Welcome" });
 });
 
+console.log("Models loaded : ", Object.keys(db));
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => console.log("Server is Running"));
