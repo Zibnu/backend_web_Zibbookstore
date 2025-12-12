@@ -90,14 +90,14 @@ exports.createOrder = async (req, res) => {
       });
     }
 
-    const newOrder = await Order.create(
-      {
-        user_id: userId,
-        total_cents: totalCents,
-        status: "pending",
-      },
-      { transaction }
-    );
+    // const newOrder = await Order.create(
+    //   {
+    //     user_id: userId,
+    //     total_cents: totalCents,
+    //     status: "pending",
+    //   },
+    //   { transaction }
+    // );
 
     for (const itemData of orderItemData) {
       await OrderItem.create(

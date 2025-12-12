@@ -39,12 +39,12 @@
         isActive : true,
       });
 
-      await sendEmail(
-        newUser.email,
-        "Selamat Datang di ZibBookstore 🎉",
-        "WelcomeEmail",
-        {username : newUser.username}
-      )
+      // await sendEmail(
+      //   newUser.email,
+      //   "Selamat Datang di ZibBookstore 🎉",
+      //   "WelcomeEmail",
+      //   {username : newUser.username}
+      // )
 
       // Response
       const userResponse = {
